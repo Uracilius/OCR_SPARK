@@ -3,7 +3,7 @@ import pytesseract
 import numpy as np
 from typing import Optional, Union
 import logging
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'C:\OCR\env\tesseract\tesseract.exe'
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
