@@ -1,5 +1,3 @@
-# spark_manager.py
-
 import findspark
 findspark.init()
 
@@ -67,10 +65,23 @@ class SparkManager:
                 .config("spark.worker.port", "8888") \
                 .getOrCreate()
 
-            # Add the ocr_processor.py file so that it is available on all workers.
             ocr_processor_abs_path = r"C:\OCR\src\ocr_processor.py"  # Use an absolute path.
+            ocr_processor_formatted = ocr_processor_abs_path.replace("\\", "/")
+
             logger.info(f"Adding file to Spark context: {ocr_processor_abs_path}")
-            self.spark.sparkContext.addFile("file:///" + ocr_processor_abs_path)
+            self.spark.sparkContext.addFile("file:///" + ocr_processor_formatted)
+
+            # Add the spark_manager.py file so that it is available on all workers.
+            spark_manager_abs_path = r"C:\OCR\src\spark_manager.py"  # Use an absolute path.
+            spark_manager_formatted = spark_manager_abs_path.replace("\\", "/")
+
+            config_abs_path = r"C:\OCR\src\config.py"  # Use an absolute path.
+            config_formatted = config_abs_path.replace("\\", "/")
+            self.spark.sparkContext.addFile("file:///" + config_formatted)
+
+            logger.info(f"Adding file to Spark context: {spark_manager_abs_path}")
+            self.spark.sparkContext.addFile("file:///" + spark_manager_formatted)
+
         else:
             logger.info("Using existing Spark session.")
         return self.spark
