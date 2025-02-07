@@ -3,6 +3,8 @@ import pytesseract
 import numpy as np
 from typing import Optional, Union
 import logging
+
+# Point to your Tesseract installation
 pytesseract.pytesseract.tesseract_cmd = r'C:\OCR\env\tesseract\tesseract.exe'
 
 logging.basicConfig(level=logging.INFO)
@@ -23,7 +25,6 @@ class CheckProcessor:
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             
             # Apply adaptive thresholding instead of global
-            # This often works better for varying lighting conditions and Russian text
             gray = cv2.adaptiveThreshold(
                 gray, 255, 
                 cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
@@ -49,10 +50,10 @@ class CheckProcessor:
             # Preprocess the image
             processed_img = CheckProcessor.preprocess_image(image)
             
-            # Configure Tesseract for Russian
-            custom_config = r'--oem 3 --psm 6 -l rus'
+            # Configure Tesseract for English (can be customized for other languages)
+            custom_config = r'--oem 3 --psm 6 -l eng'
             
-            # Perform OCR with Russian language
+            # Perform OCR
             text = pytesseract.image_to_string(processed_img, config=custom_config)
             
             # Get confidence scores and other data
@@ -67,7 +68,7 @@ class CheckProcessor:
                 'confidence': avg_confidence,
                 'word_count': len([word for word in data['text'] if word.strip()]),
                 'status': 'success',
-                'language': 'rus'
+                'language': 'eng'  # Update as needed
             }
             
         except Exception as e:
